@@ -1,0 +1,26 @@
+1) For pushing the already present directory to the git remote repo by the following cmd
+      >> just redirect to the already present directory and use the below cmd for setting up the git environment
+              *  git init
+
+      >> now add the remote repo to the local directory
+              * git remote set-url origin < https_git_repo_link >
+
+      >> to check the remote url is update or not use the below cmd
+              * git remote -v
+
+      >> In order to avoid the conflicts with remote and local files present, just pull the remote repo files to the local
+              * git pull origin <branch_name>  (usually the branch name is main)
+
+      >> If we get any conflict issue, just use the below command to merge the conflicts between them
+              * git pull origin main --rebase
+
+      >> before pushing the directory, just stage all the files to do so follow the cmd
+              * git add .
+
+      >> now commit permanently make the changes with a message
+              * git commit -m "<message>"
+
+      >> After committing the changes, now try to push to the remote git repo
+              * git push origin <branch_name>
+              
+      
