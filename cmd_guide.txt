@@ -23,4 +23,19 @@
       >> After committing the changes, now try to push to the remote git repo
               * git push origin <branch_name>
               
-      
+2) To clone the remote git repositories to the current local folder, then follow the below commands
+
+      >> now try to clone the remote repo using the below command
+              * git clone <remote_repo_https_link>
+
+3) To check for the git branch
+      * git branch
+
+4) To change the current branch to other branch
+      * git checkout <branch_name>
+
+5) For renaming the current branch 
+      * git branch -m <branch_new_name>
+
+6) 
+
