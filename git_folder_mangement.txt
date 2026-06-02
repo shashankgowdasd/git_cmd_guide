@@ -1,0 +1,177 @@
+Here is a complete, structured reference document containing everything you learned and conquered today. You can copy this entire block and save it as a `git-cheatsheet.md` or a personal reference file!
+
+---
+
+# Git & Terminal Workflow Mastery: A Developer's Reference
+
+This document serves as a quick-reference guide for navigating Git, resolving common terminal conflicts, structuring embedded repositories, and executing standard professional workflows.
+
+## ⚙️ 1. Git Configuration & Quality of Life
+
+### Handling the Vim Text Editor
+
+When Git pauses to ask for a commit/merge message, it often defaults to the **Vim** terminal editor.
+
+* **To save and exit Vim:** Press `Esc`, type `:wq`, and press `Enter`.
+* **To exit without saving:** Press `Esc`, type `:q!`, and press `Enter`.
+* **To skip the editor entirely:** Add `--no-edit` to your command (e.g., `git revert <hash> --no-edit`).
+
+### Setting VS Code as the Default Editor
+
+To permanently stop Vim from appearing and use VS Code for Git messages instead:
+
+```bash
+git config --global core.editor "code --wait"
+
+```
+
+### The "LF vs CRLF" Warning
+
+Windows uses `CRLF` for line endings, while Linux/macOS use `LF`. Git automatically handles the translation behind the scenes. If the warnings get annoying, you can silence them (assuming your code editor saves in LF):
+
+```bash
+git config --global core.autocrlf false
+
+```
+
+---
+
+## 🩹 2. Fixing Mistakes and Undoing Pushes
+
+### Method A: The Safe Revert (Best for shared code)
+
+Creates a *new* commit that perfectly undoes the mistake, preserving the timeline.
+
+```bash
+git log --oneline           # Find the commit hash you want to undo
+git revert <commit-hash>    # Revert it (opens editor to confirm message)
+git push origin main        # Push the fix
+
+```
+
+### Method B: The Hard Reset (Best for solo work)
+
+Literally rewrites history by erasing the last commit. **Never do this if others have pulled your code.**
+
+```bash
+git reset --hard HEAD~1     # Deletes the last commit and all its changes locally
+git push origin main --force # Forces GitHub to accept your rewritten timeline
+
+```
+
+---
+
+## 🔀 3. Resolving Pull & Merge Errors
+
+### Error: "Divergent branches"
+
+Git doesn't know how you want to combine your local changes with GitHub's changes. Tell Git to default to standard merging:
+
+```bash
+git config pull.rebase false  # Tell Git to merge (run once)
+git pull origin main          # Try the pull again
+
+```
+
+### Error: "Refusing to merge unrelated histories"
+
+Git thinks your local repository and the GitHub repository are two different projects. Force them to merge:
+
+```bash
+git pull origin main --allow-unrelated-histories
+
+```
+
+---
+
+## 📁 4. Structuring a Repository
+
+### Tracking Empty Folders
+
+Git strictly tracks files, not folders. If you create an empty folder (like `nrf9151_Firmware`) to hold future code, Git will ignore it.
+
+* **The Fix:** Create a hidden, empty file named `.gitkeep` inside the folder. Git will now track the folder.
+
+### Cleaning Up Folders via PowerShell
+
+To safely delete everything in a folder *except* specific items (like keeping your firmware folders and README), run this inside the folder:
+
+```powershell
+Get-ChildItem | Where-Object { $_.Name -notin @("nrf5340_Firmware", "nrf9151_Firmware", "README.md", "LICENSE", ".git") } | Remove-Item -Recurse -Force
+
+```
+
+---
+
+## 🕵️ 5. Inspecting Code & Time Travel
+
+### Previewing GitHub changes *before* pulling
+
+```bash
+git fetch origin              # Download updates to the hidden waiting room
+git diff main origin/main     # See the exact line-by-line code changes
+git log main..origin/main     # See the commit messages
+
+```
+
+### Seeing what changed *after* a pull
+
+```bash
+git log -p -1                 # View line-by-line changes for the most recent action
+
+```
+
+### Understanding `git checkout`
+
+`git checkout` does three different things depending on how you use it:
+
+1. **Switch Branches:** `git checkout branch-name` (Modern equivalent: `git switch`)
+2. **Time Travel:** `git checkout <commit-hash>` (View old code)
+3. **Discard Uncommitted Changes:** `git checkout -- file.c` (Modern equivalent: `git restore`)
+
+---
+
+## 🤝 6. The Professional Pull Request (PR) Workflow
+
+Never push directly to `main` when building new features. Use this workflow:
+
+1. **Create and switch to a sandbox branch:**
+```bash
+git checkout -b feature/my-new-code
+
+```
+
+
+2. **Write code, then commit it locally:**
+```bash
+git add .
+git commit -m "Added a new feature"
+
+```
+
+
+3. **Push the new branch to GitHub:**
+```bash
+git push -u origin feature/my-new-code
+
+```
+
+
+4. **Go to GitHub.com:** Click "Compare & pull request", review, and merge into `main`.
+5. **Sync your local computer:**
+```bash
+git checkout main
+git pull origin main
+
+```
+
+
+
+---
+
+## 💻 7. Essential PowerShell Shortcuts
+
+* **Create an empty file:** `New-Item filename.md` (replaces Linux `touch`)
+* **Open current folder in VS Code:** `code .`
+* **Open specific file in VS Code:** `code filename.c`
+* **Copy a folder and all its contents:** `cp -Recurse -Force .\source\ .\destination\`
