@@ -1,0 +1,14 @@
+# 1. Clone the repo metadata without downloading any files yet (and only grab the latest commit history to save time)
+git clone --no-checkout --depth 1 <REPOSITORY_URL>
+
+# 2. Move into the newly created repository folder
+cd <REPOSITORY_NAME>
+
+# 3. Initialize sparse-checkout
+git sparse-checkout init --cone
+
+# 4. Specify the exact path of the folder you want to pull
+git sparse-checkout set path/to/specific/folder
+
+# 5. Check out the files to materialize them on your machine
+git checkout
